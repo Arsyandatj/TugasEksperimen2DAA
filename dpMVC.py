@@ -1,3 +1,5 @@
+import tracemalloc
+import profile
 import random
 import time
 
@@ -23,7 +25,6 @@ def dfs(adj, dp, src, par):
  
             # including source in the vertex cover
             dp[src][1] = dp[src][1] + min(dp[child][1], dp[child][0])
- 
  
 def minSizeVertexCover(adj, N):
     dp = [[0 for j in range(2)] for i in range(N+1)]
@@ -57,10 +58,12 @@ def parse(datafile):
 adj = parse("data_besar.txt")
 
 N = len(adj) -1
-
+tracemalloc.start()
 start_time = time.time()
 minSizeVertexCover(adj, N)
 end_time = time.time()
+print(f"Memory usage: {tracemalloc.get_traced_memory()}")
+tracemalloc.stop()
 
 print(f"Running time : {end_time-start_time}")
 

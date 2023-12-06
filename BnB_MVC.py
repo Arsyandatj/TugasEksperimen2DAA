@@ -1,5 +1,6 @@
 
 import argparse
+import tracemalloc
 import networkx as nx
 import operator
 import time
@@ -14,11 +15,11 @@ def addEdgeParse(adj, x, y):
 def parse(datafile):
     with open(datafile) as f:
         if datafile == "data_kecil.txt":
-            num_vertices = 100
+            num_vertices = 10
         elif datafile == "data_sedang.txt":
-            num_vertices = 300
+            num_vertices = 30
         else:
-            num_vertices = 900
+            num_vertices = 90
         # num_vertices = int(f.readline())
         adj_list = [[] for _ in range(num_vertices + 1)]
 
@@ -197,9 +198,10 @@ def VC_Size(VC):
 	return vc_size
 
  
-adj_list = parse("data_besar.txt")	
+adj_list = parse("data_kecil.txt")	
 g = create_graph(adj_list)
 
+tracemalloc.start()
 start_time = time.time()
 listVC,times = BnB(g)
 
@@ -207,11 +209,15 @@ for element in listVC:
 		if element[1]==0:
 			listVC.remove(element)
 end_time = time.time()
-
+# print(adj_list)
 print(times)
 print(listVC)
-
+# visualize_tree(g)
+print(f"Memory usage: {tracemalloc.get_traced_memory()}")
 print(f"Running time : {end_time-start_time}")
+tracemalloc.stop()
+
+
 
 # Sumber : https://github.com/sangyh/minimum-vertex-cover/blob/master/BnB_Edited.py
 
